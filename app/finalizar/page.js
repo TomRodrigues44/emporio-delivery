@@ -1,0 +1,1 @@
+export default function FinalizarPedido() { return <div>Finalizar pedido</div> }
