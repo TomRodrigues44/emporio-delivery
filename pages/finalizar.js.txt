@@ -1,0 +1,43 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+export default function TelaFinalizar() {
+  const router = useRouter();
+  const [carrinho, setCarrinho] = useState([]);
+
+  useEffect(() => {
+    const dados = localStorage.getItem("carrinho");
+    if (!dados) {
+      router.push("/");
+    } else {
+      setCarrinho(JSON.parse(dados));
+    }
+  }, []);
+
+  const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
+
+  return (
+    <div className="min-h-screen bg-orange-50 p-4">
+      <h1 className="text-3xl font-bold text-orange-600 mb-4 text-center">Finalizar Pedido</h1>
+
+      {carrinho.map((item, i) => (
+        <div key={i} className="bg-white rounded-2xl p-4 shadow mb-3">
+          <p className="font-medium">{item.nome}</p>
+          {item.saboresEscolhidos && (
+            <p className="text-sm text-gray-600">
+              Sabores: {item.saboresEscolhidos.join(", ")}
+            </p>
+          )}
+          <p className="text-orange-600 font-bold">R$ {item.preco.toFixed(2)}</p>
+        </div>
+      ))}
+
+      <div className="mt-6 p-4 bg-white rounded-2xl shadow text-lg font-semibold flex justify-between">
+        <span>Total</span>
+        <span className="text-orange-600">R$ {total.toFixed(2)}</span>
+      </div>
+    </div>
+  );
+}
